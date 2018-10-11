@@ -28,6 +28,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.RestrictTo;
 import android.util.AttributeSet;
 import android.util.StateSet;
 import android.util.TypedValue;
@@ -40,11 +41,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import static android.support.annotation.RestrictTo.Scope.LIBRARY;
+
 /**
  * @author xyczero617@gmail.com
  * @time 16/2/22
  */
-public class DrawableUtils {
+@RestrictTo(LIBRARY)
+public final class DrawableUtils {
 
     static Drawable createDrawable(Context context, int resId) {
         if (resId <= 0) return null;
@@ -146,7 +150,7 @@ public class DrawableUtils {
 
     static int getAttrTintColor(Context context, AttributeSet attrs, int attr, int defaultValue) {
         final TypedArray a = obtainAttributes(context.getResources(), context.getTheme(), attrs, new int[]{attr});
-        final int tintColor = com.bilibili.magicasakura.utils.ThemeUtils.replaceColor(context, a.getColor(0, defaultValue));
+        final int tintColor = ThemeUtils.replaceColor(context, a.getColor(0, defaultValue));
         a.recycle();
         return tintColor;
     }
@@ -203,7 +207,7 @@ public class DrawableUtils {
     static int getAttrColor(Context context, AttributeSet attrs, int attr, int defaultValue) {
         TypedArray a = obtainAttributes(context.getResources(), context.getTheme(), attrs, new int[]{attr});
         final int colorId = a.getResourceId(0, 0);
-        final int value = colorId != 0 ? com.bilibili.magicasakura.utils.ThemeUtils.replaceColorById(context, colorId) : com.bilibili.magicasakura.utils.ThemeUtils.replaceColor(context, a.getColor(0, defaultValue));
+        final int value = colorId != 0 ? ThemeUtils.replaceColorById(context, colorId) : ThemeUtils.replaceColor(context, a.getColor(0, defaultValue));
         a.recycle();
         return value;
     }

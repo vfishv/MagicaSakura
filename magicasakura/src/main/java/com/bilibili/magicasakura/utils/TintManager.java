@@ -27,6 +27,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
 import android.support.v4.util.LruCache;
 import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
@@ -39,18 +40,21 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import static android.support.annotation.RestrictTo.Scope.LIBRARY;
+
 /**
  * @author xyczero617@gmail.com
  * @time 15/9/15
  */
-public class TintManager {
+@RestrictTo(LIBRARY)
+public final class TintManager {
 
     private static final String TAG = "TintManager";
     private static final boolean DEBUG = false;
     private static final PorterDuff.Mode DEFAULT_MODE = PorterDuff.Mode.SRC_IN;
     private static final String SKIP_DRAWABLE_TAG = "appcompat_skip_skip";
 
-    private static final WeakHashMap<Context, com.bilibili.magicasakura.utils.TintManager> INSTANCE_CACHE = new WeakHashMap<>();
+    private static final WeakHashMap<Context, TintManager> INSTANCE_CACHE = new WeakHashMap<>();
     private static final ColorFilterLruCache COLOR_FILTER_CACHE = new ColorFilterLruCache(6);
 
     private final Object mDrawableCacheLock = new Object();
@@ -60,7 +64,7 @@ public class TintManager {
     private SparseArray<WeakReference<Drawable.ConstantState>> mCacheDrawables;
     private SparseArray<String> mSkipDrawableIdTags;
 
-    public static com.bilibili.magicasakura.utils.TintManager get(Context context) {
+    public static TintManager get(Context context) {
         if (context == null) return null;
 
         if (context instanceof ContextThemeWrapper) {
@@ -69,9 +73,9 @@ public class TintManager {
         if (context instanceof android.view.ContextThemeWrapper) {
             context = ((android.view.ContextThemeWrapper) context).getBaseContext();
         }
-        com.bilibili.magicasakura.utils.TintManager tm = INSTANCE_CACHE.get(context);
+        TintManager tm = INSTANCE_CACHE.get(context);
         if (tm == null) {
-            tm = new com.bilibili.magicasakura.utils.TintManager(context);
+            tm = new TintManager(context);
             INSTANCE_CACHE.put(context, tm);
             printLog("[get TintManager] create new TintManager.");
         }
@@ -83,8 +87,8 @@ public class TintManager {
     }
 
     public static void clearTintCache() {
-        for (Map.Entry<Context, com.bilibili.magicasakura.utils.TintManager> entry : INSTANCE_CACHE.entrySet()) {
-            com.bilibili.magicasakura.utils.TintManager tm = entry.getValue();
+        for (Map.Entry<Context, TintManager> entry : INSTANCE_CACHE.entrySet()) {
+            TintManager tm = entry.getValue();
             if (tm != null)
                 tm.clear();
         }
@@ -216,7 +220,7 @@ public class TintManager {
         }
     }
 
-    public static void tintViewBackground(View view, com.bilibili.magicasakura.utils.TintInfo tint) {
+    public static void tintViewBackground(View view, TintInfo tint) {
         Drawable background;
         if (view == null || (background = view.getBackground()) == null) return;
 

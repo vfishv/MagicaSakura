@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "0.1.8"
+version = "0.1.9-beta3"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -14,7 +14,9 @@ android {
         versionCode 1
         versionName version
     }
-
+    sourceSets{
+        main.res.srcDirs 'res', 'res-public'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -93,11 +95,9 @@ bintray {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile "com.android.support:appcompat-v7:${rootProject.ext.supportVersion}"
-    compile "com.android.support:design:${rootProject.ext.supportVersion}"
-    compile "com.android.support:gridlayout-v7:${rootProject.ext.supportVersion}"
-    compile "com.android.support.constraint:constraint-layout:${rootProject.ext.constraintVersion}"
+    implementation "com.android.support:design:${rootProject.ext.supportVersion}"
+    implementation "com.android.support.constraint:constraint-layout:${rootProject.ext.constraintVersion}"
 
 }
